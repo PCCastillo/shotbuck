@@ -36,9 +36,9 @@ cargar_escopeta() {
     done
 
     echo "" #salto de linea para terminar la """animacion"""
-
-    echo -e "Reales: ${ROJO}$balas_reales${RESET} | Falsas: ${AZUL}$balas_seguras${RESET}"
     sleep 1.5
+
+    clear #limpiamos pantalla
 
     cargador=()
     #llenamos
@@ -111,7 +111,7 @@ while [ $vidas_jugador -gt 0 ] && [ $vidas_dealer -gt 0 ]; do
         echo "1) Dispararle al Dealer"
         echo "2) Dispararte a ti mismo"
         read -p "Selecciona una opción (1-2): " opcion
-
+        clear #limpiar
         case $opcion in
             1)
                 disparar "JUGADOR" "DEALER"
@@ -126,9 +126,12 @@ while [ $vidas_jugador -gt 0 ] && [ $vidas_dealer -gt 0 ]; do
                 ;;
             *)
                 echo "Opción no válida"
+                sleep 1
+                clear #limpiar
+                continue
                 ;;
         esac
-        sleep 1
+        clear
     done
 
     #alguien se murio?
@@ -141,25 +144,40 @@ while [ $vidas_jugador -gt 0 ] && [ $vidas_dealer -gt 0 ]; do
         mostrar_status
         echo "Turno del Dealer... pensando..."
         sleep 1.5
-
+        clear
         #si queda 1 sola bala y sabe que es real, te dispara
         #por ahora, simplemente elige al azar 50/50
 
-        eleccion=$(( RANDOM % 2 ))
-        if [ $eleccion -eq 0 ]; then
+        #ahora usa probabilidad, sabe contar
+        if [ $reales_restantes -gt $seguras_restantes ]; then
+            #Si hay más rojas, te dispara
             disparar "DEALER" "JUGADOR"
             turno_dealer=false
-        else
+        elif [ $seguras_restantes -gt $reales_restantes ]; then
+            #Si hay más azules, se dispara
             disparar "DEALER" "DEALER"
             if [ $? -eq 1 ]; then
+                turno_dealer=false #si era real XD
+            fi
+        else
+            #50/50
+            eleccion=$(( RANDOM % 2 ))
+            if [ $eleccion -eq 0 ]; then
+                disparar "DEALER" "JUGADOR"
                 turno_dealer=false
+            else
+                disparar "DEALER" "DEALER"
+                if [ $? -eq 1 ]; then
+                    turno_dealer=false
+                fi
             fi
         fi
-        sleep 1
+        clear
     done
 done
 
 # --- Fin de la partida ---
+clear
 echo -e "\n========================================"
 if [ $vidas_jugador -le 0 ]; then
     echo -e "  ${ROJO}DERROTA${RESET}"
