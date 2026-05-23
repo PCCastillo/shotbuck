@@ -15,8 +15,8 @@ cargar_escopeta() {
 
     echo -e "\n---ESCOPETA EN LA MESA---"
     echo "Cargando cartuchos..."
-    #test
-    #echo "Balas Reales (Live): $balas_reales | Balas Seguras (Blank): $balas_seguras"
+    #ya no es test, si se tenia que mostrar XD
+    echo "Balas Reales (Live): $balas_reales | Balas Seguras (Blank): $balas_seguras"
     sleep 1.5
 
     cargador=()
