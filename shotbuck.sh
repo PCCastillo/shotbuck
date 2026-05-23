@@ -1,5 +1,12 @@
 #!/bin/bash
 
+###COLORES###
+ROJO='\033[0;31m'
+AZUL='\033[0;34m'
+VERDE='\033[0;32m'
+AMARILLO='\033[1;33m'
+RESET='\033[0m'
+
 ###VIDAS###
 MAX_VIDAS=3
 vidas_jugador=$MAX_VIDAS
@@ -13,10 +20,24 @@ cargar_escopeta() {
     balas_reales=$(( RANDOM % (total_balas - 1) + 1 ))
     balas_seguras=$(( total_balas - balas_reales ))
 
-    echo -e "\n---ESCOPETA EN LA MESA---"
-    echo "Cargando cartuchos..."
-    #ya no es test, si se tenia que mostrar XD
-    echo "Balas Reales (Live): $balas_reales | Balas Seguras (Blank): $balas_seguras"
+    echo -e "\n${AMARILLO}---ESCOPETA EN LA MESA---"
+    echo -n "Cargando cartuchos: "
+
+    #reales = rojo
+    for ((i=0; i<balas_reales; i++)); do
+        echo -ne "${ROJO}| ${RESET}"
+        sleep 1
+    done
+
+    #falsas =  azules
+    for ((i=0; i<balas_seguras; i++)); do
+        echo -ne "${AZUL}| ${RESET}"
+        sleep 1
+    done
+
+    echo "" #salto de linea para terminar la """animacion"""
+
+    echo "Reales: ${ROJO}$balas_reales ${RESET}| Falsas: ${AZUL}$balas_seguras"
     sleep 1.5
 
     cargador=()
@@ -37,7 +58,7 @@ cargar_escopeta() {
 ###ESTADO###
 mostrar_status() {
     echo -e "\n========================================"
-    echo " JUGADOR: [$vidas_jugador/$MAX_VIDAS Vidas]  |  DEALER: [$vidas_dealer/$MAX_VIDAS Vidas]"
+    echo " JUGADOR: [${VERDE}$vidas_jugador/$MAX_VIDAS Vidas${RESET}]  |  DEALER: [${VERDE}$vidas_dealer/$MAX_VIDAS Vidas${RESET}]"
     #test
     #echo " Cartuchos restantes en la recámara: ${#cargador[@]}"
     echo "========================================"
@@ -57,7 +78,7 @@ disparar() {
     sleep 1.2
 
     if [ "$bala" == "real" ]; then #real
-        echo -e "Era un cartucho REAL"
+        echo -e "Era un cartucho ${ROJO}REAL${RESET}"
         if [ "$objetivo" == "JUGADOR" ]; then #a ti
             ((vidas_jugador--))
         else #al otro
@@ -65,7 +86,7 @@ disparar() {
         fi
         return 1 #daño = flujo de turnos normal
     else
-        echo -e "Era un cartucho SEGURO."
+        echo -e "Era un cartucho ${AZUL}SEGURO${RESET}"
         if [ "$tirador" == "$objetivo" ]; then #a ti
             echo "Conservas tu turno."
             return 0 #no daño propio = no cambia turno
@@ -141,8 +162,8 @@ done
 # --- Fin de la partida ---
 echo -e "\n========================================"
 if [ $vidas_jugador -le 0 ]; then
-    echo "  DERROTA"
+    echo "  ${ROJO}DERROTA${RESET}"
 else
-    echo "  VICTORIO"
+    echo "  ${VERDE}VICTORIA${RESET}"
 fi
 echo -e "========================================\n"
