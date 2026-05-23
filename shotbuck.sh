@@ -324,6 +324,7 @@ while [ $vidas_jugador -gt 0 ] && [ $vidas_dealer -gt 0 ]; do
                 fi
             fi
             dealer_sabe_bala="" #amnesia memoria tras disparar
+            clear #me olvide esto
         else
             clear #limpia pantalla
         fi
