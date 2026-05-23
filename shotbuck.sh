@@ -30,6 +30,12 @@ cargar_escopeta() {
     balas_reales=$(( RANDOM % (total_balas - 1) + 1 ))
     balas_seguras=$(( total_balas - balas_reales ))
 
+    #repartir objetos (máximo 8 en inventario)
+    for ((k=0; k<2; k++)); do
+        if [ ${#inv_jugador[@]} -lt 8 ]; then inv_jugador+=("${OBJETOS[$((RANDOM % 3))]}"); fi
+        if [ ${#inv_dealer[@]} -lt 8 ]; then inv_dealer+=("${OBJETOS[$((RANDOM % 3))]}"); fi
+    done
+
     echo -e "\n${AMARILLO}---ESCOPETA EN LA MESA---${RESET}"
     echo -n "Cargando cartuchos: "
 
