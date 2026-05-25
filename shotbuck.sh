@@ -187,7 +187,7 @@ while [ $vidas_jugador -gt 0 ] && [ $vidas_dealer -gt 0 ]; do
     if [ ${#cargador[@]} -eq 0 ]; then
         cargar_escopeta
     fi
-
+    
     ###TURNO JUGADOR###
     turno_jugador=true
     while $turno_jugador && [ $vidas_jugador -gt 0 ] && [ $vidas_dealer -gt 0 ] && [ ${#cargador[@]} -gt 0 ]; do
